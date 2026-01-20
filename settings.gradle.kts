@@ -1,4 +1,36 @@
 dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+
+        maven("https://maven.pkg.github.com/compactmods/feather") {
+            name = "Github PKG - Feather"
+            credentials {
+                username = providers.gradleProperty("gpr.user").orNull
+                    ?: System.getenv("GITHUB_ACTOR")
+                password = providers.gradleProperty("gpr.token").orNull
+                    ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+
+        maven("https://maven.pkg.github.com/compactmods/gander") {
+            name = "Github PKG - Gander"
+            credentials {
+                username = providers.gradleProperty("gpr.user").orNull
+                    ?: System.getenv("GITHUB_ACTOR")
+                password = providers.gradleProperty("gpr.token").orNull
+                    ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+
+        maven("https://maven.neoforged.net/releases") {
+            name = "NeoForged"
+        }
+
+        maven("https://maven.parchmentmc.org") {
+            name = "ParchmentMC"
+        }
+    }
+
     addVersionCatalog(this, "neoforged")
     addVersionCatalog(this, "mojang")
     addVersionCatalog(this, "compactmods")

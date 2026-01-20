@@ -103,10 +103,6 @@ neoForge {
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             systemProperty("forge.enabledGameTestNamespaces", modId)
-
-            programArguments.addAll("--username", "Nano")
-            programArguments.addAll("--width", "1920")
-            programArguments.addAll("--height", "1080")
         }
 
         create("client2") {
@@ -115,10 +111,6 @@ neoForge {
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             systemProperty("forge.enabledGameTestNamespaces", modId)
-
-            programArguments.addAll("--username", "Nano2")
-            programArguments.addAll("--width", "1920")
-            programArguments.addAll("--height", "1080")
         }
 
         create("server") {
