@@ -24,6 +24,7 @@ public class BlockTagGenerator extends BlockTagsProvider {
     protected void addTags(HolderLookup.Provider provider) {
         final var breakableWall = Rooms.Blocks.BREAKABLE_WALL.get();
         final var solidWall = Rooms.Blocks.SOLID_WALL.get();
+        final var solidWallCracked = Rooms.Blocks.SOLID_WALL_CRACKED.get();
         final var boundMachine = Machines.Blocks.BOUND_MACHINE.get();
         final var unboundMachine = Machines.Blocks.UNBOUND_MACHINE.get();
         final var voidAir = Dimension.BLOCK_MACHINE_VOID_AIR.get();
@@ -45,6 +46,7 @@ public class BlockTagGenerator extends BlockTagsProvider {
         tag(Tags.Blocks.RELOCATION_NOT_SUPPORTED)
                 .add(boundMachine)
                 .add(solidWall)
+                .add(solidWallCracked)
                 .add(voidAir);
     }
 }

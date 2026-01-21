@@ -25,6 +25,7 @@ public class ItemModelGenerator extends ItemModelProvider {
         withExistingParent(Machines.Items.UNBOUND_MACHINE.getId().getPath(), modLoc("block/machine/machine"));
         
         withExistingParent("solid_wall", modLoc("block/wall"));
+        withExistingParent("solid_wall_cracked", modLoc("block/wall_cracked"));
         withExistingParent("wall", modLoc("block/wall"));
 
         basic(modLoc("personal_shrinking_device"))

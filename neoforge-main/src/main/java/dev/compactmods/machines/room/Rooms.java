@@ -27,6 +27,13 @@ public interface Rooms {
                         .sound(SoundType.METAL)
                         .lightLevel((state) -> 15)));
 
+        // add a cracked variant of the solid wall
+        DeferredBlock<SolidWallBlock> SOLID_WALL_CRACKED = CMRegistries.BLOCKS.register("solid_wall_cracked", () ->
+                new SolidWallBlock(BlockBehaviour.Properties.of()
+                        .strength(-1.0F, 3600000.8F)
+                        .sound(SoundType.METAL)
+                        .lightLevel((state) -> 15)));
+
 
         DeferredBlock<BreakableWallBlock> BREAKABLE_WALL = CMRegistries.BLOCKS.register("wall", () ->
                 new BreakableWallBlock(BlockBehaviour.Properties.of()
@@ -42,6 +49,9 @@ public interface Rooms {
 
         DeferredItem<ItemBlockWall> ITEM_SOLID_WALL = CMRegistries.ITEMS.register("solid_wall", () ->
                 new ItemBlockWall(Blocks.SOLID_WALL.get(), WALL_ITEM_PROPS.get()));
+
+        DeferredItem<ItemBlockWall> ITEM_SOLID_WALL_CRACKED = CMRegistries.ITEMS.register("solid_wall_cracked", () ->
+                new ItemBlockWall(Blocks.SOLID_WALL_CRACKED.get(), WALL_ITEM_PROPS.get()));
 
         DeferredItem<ItemBlockWall> BREAKABLE_WALL = CMRegistries.ITEMS.register("wall", () ->
                 new ItemBlockWall(Blocks.BREAKABLE_WALL.get(), WALL_ITEM_PROPS.get()));

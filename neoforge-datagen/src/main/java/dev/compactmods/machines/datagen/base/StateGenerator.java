@@ -20,7 +20,9 @@ public class StateGenerator extends BlockStateProvider {
         BlockModelProvider models = models();
 
         var wall = models.cubeAll("block/wall", modLoc("block/wall"));
+        var wall_cracked = models.cubeAll("block/wall_cracked", modLoc("block/wall_cracked"));
         simpleBlock(Rooms.Blocks.SOLID_WALL.get(), wall);
+        simpleBlock(Rooms.Blocks.SOLID_WALL_CRACKED.get(), wall_cracked);
         simpleBlock(Rooms.Blocks.BREAKABLE_WALL.get(), wall);
 
         // New machine block

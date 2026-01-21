@@ -92,6 +92,7 @@ public class EnglishLangGenerator extends dev.compactmods.machines.datagen.base.
 
         addBlock(Rooms.Blocks.BREAKABLE_WALL, "Compact Machine Wall");
         addBlock(Rooms.Blocks.SOLID_WALL, "Solid Compact Machine Wall");
+        addBlock(Rooms.Blocks.SOLID_WALL_CRACKED, "Cracked Solid Compact Machine Wall");
 
         addItem(Shrinking.PERSONAL_SHRINKING_DEVICE, "Personal Shrinking Device");
         addItem(Shrinking.SHRINKING_MODULE, "Atom Shrinking Module");
