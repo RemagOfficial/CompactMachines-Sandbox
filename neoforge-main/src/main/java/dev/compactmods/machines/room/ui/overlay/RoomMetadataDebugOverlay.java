@@ -22,19 +22,6 @@ import java.util.UUID;
 public class RoomMetadataDebugOverlay implements LayeredDraw.Layer {
 
     private static void drawRoomCode(GuiGraphics graphics, Minecraft mc, Player player) {
-        // Debug log the current data attachments
-        boolean hasCode = player.getExistingData(CMDataAttachments.CURRENT_ROOM_CODE).isPresent();
-        boolean hasDepth = player.getExistingData(CMDataAttachments.CURRENT_ROOM_DEPTH).isPresent();
-        
-        if (mc.level.getGameTime() % 20 == 0) { // Log once per second to avoid spam
-            System.out.println("[DEBUG] Room Code Present: " + hasCode);
-            System.out.println("[DEBUG] Room Depth Present: " + hasDepth);
-            if (hasDepth) {
-                player.getExistingData(CMDataAttachments.CURRENT_ROOM_DEPTH).ifPresent(depth -> {
-                    System.out.println("[DEBUG] Current Room Depth: " + depth);
-                });
-            }
-        }
 
         // Draw room code
         player.getExistingData(CMDataAttachments.CURRENT_ROOM_CODE).ifPresent(code -> {

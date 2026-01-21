@@ -19,7 +19,6 @@ public class PlayerDepthHelper {
 
         if (!player.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
             String roomCode = player.getExistingData(CMDataAttachments.CURRENT_ROOM_CODE).orElse("");
-            System.out.println("[DEBUG] Sending sync packet - Room: " + roomCode + ", Depth: " + depth);
             UUID owner = getRoomOwner(serverPlayer, roomCode);
             PacketDistributor.sendToPlayer(serverPlayer,new SyncRoomMetadataPacket(roomCode, depth, owner));
         }
