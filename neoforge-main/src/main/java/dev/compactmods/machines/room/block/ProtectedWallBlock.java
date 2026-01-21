@@ -32,7 +32,7 @@ public abstract class ProtectedWallBlock extends Block {
 
     @Override
     public boolean canEntityDestroy(BlockState state, BlockGetter world, BlockPos pos, Entity entity) {
-        return false;
+        return entity instanceof Player player && player.isCreative() && player.isShiftKeyDown();
     }
 
     @Override
