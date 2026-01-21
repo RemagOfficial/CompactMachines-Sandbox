@@ -102,34 +102,36 @@ public abstract class RoomHelper {
             final var currentHistory = history.lastHistory(serverPlayer).orElse(null);
             if(currentHistory != null) {
 
-                // Pop the current history entry to get to the previous one
-                history.popHistory(serverPlayer, 1);
+                // Get the previous history entry before popping anything
+                final var previousHistory = history.history(serverPlayer)
+                    .skip(1)  // Skip current room
+                    .findFirst()
+                    .orElse(null);
 
-                // Get the previous history entry (or null if this was the last one)
-                final var previousHistory = history.lastHistory(serverPlayer).orElse(null);
                 if (previousHistory != null) {
-
                     serverPlayer.getCooldowns().addCooldown(Shrinking.PERSONAL_SHRINKING_DEVICE.get(), 25);
 
                     String newRoomCode = previousHistory.roomCode();
-
-                    history.popHistory(serverPlayer, 1);
-
-                    // Get the previous room's depth from history
+                    // Get the previous room's depth to get the correct parent depth
                     int newDepth = Math.max(0, previousHistory.roomDepth());
 
-                    // Decrement depth by 1 to match the room we're returning to
-                    PlayerDepthHelper.setPlayerDepth(serverPlayer, newDepth);
-
-                    // Update the player's current room data
+                    // Update the player's current room data before teleporting
                     serverPlayer.setData(CMDataAttachments.CURRENT_ROOM_CODE, newRoomCode);
                     serverPlayer.setData(CMDataAttachments.CURRENT_ROOM_DEPTH, newDepth);
                     serverPlayer.setData(CMDataAttachments.LAST_ROOM_ENTRYPOINT, previousHistory.entryPoint());
+                    
+                    // Update depth after setting the room data to ensure sync
+                    PlayerDepthHelper.setPlayerDepth(serverPlayer, newDepth);
+
+                    // Only pop the current history entry after we've saved all the necessary data
+                    history.popHistory(serverPlayer, 1);
 
                     final var location = currentHistory.entryPoint().entryLocation();
                     final var level = serv.getLevel(location.dimension());
                     if (level != null) {
+                        LOGS.debug("Teleporting player {} to {} as they jump up a level...", serverPlayer.getUUID(), location);
                         serverPlayer.changeDimension(CompactDimensionTransitions.to(level, location.position(), location.rotation()));
+
                         return RoomExitResult.SUCCESS_WENT_TO_LAST_ENTRYPOINT;
                     } else {
                         LOGS.error("Player tracking points to an unknown dimension. Teleporting player {} to their default spawn instead.", serverPlayer.getUUID());
