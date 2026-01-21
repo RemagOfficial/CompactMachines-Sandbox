@@ -38,11 +38,12 @@ public class ClientRoomPacketHandler {
         }
     }
 
-    public static void handleRoomSync(String roomCode) {
+    public static void handleRoomSync(String roomCode, int depth) {
         final var mc = Minecraft.getInstance();
 
         // FIXME - Current Room Owner
         mc.player.setData(CMDataAttachments.CURRENT_ROOM_CODE, roomCode);
+        mc.player.setData(CMDataAttachments.CURRENT_ROOM_DEPTH, depth);
         // mc.player.setData(Rooms.DataAttachments)
     }
 }

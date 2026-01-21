@@ -13,6 +13,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 import net.minecraft.util.CommonColors;
 import net.minecraft.world.entity.player.Player;
 
@@ -21,13 +22,30 @@ import java.util.UUID;
 public class RoomMetadataDebugOverlay implements LayeredDraw.Layer {
 
     private static void drawRoomCode(GuiGraphics graphics, Minecraft mc, Player player) {
+        // Debug log the current data attachments
+        boolean hasCode = player.getExistingData(CMDataAttachments.CURRENT_ROOM_CODE).isPresent();
+        boolean hasDepth = player.getExistingData(CMDataAttachments.CURRENT_ROOM_DEPTH).isPresent();
+        
+        if (mc.level.getGameTime() % 20 == 0) { // Log once per second to avoid spam
+            System.out.println("[DEBUG] Room Code Present: " + hasCode);
+            System.out.println("[DEBUG] Room Depth Present: " + hasDepth);
+            if (hasDepth) {
+                player.getExistingData(CMDataAttachments.CURRENT_ROOM_DEPTH).ifPresent(depth -> {
+                    System.out.println("[DEBUG] Current Room Depth: " + depth);
+                });
+            }
+        }
+
+        // Draw room code
         player.getExistingData(CMDataAttachments.CURRENT_ROOM_CODE).ifPresent(code -> {
-            graphics.drawCenteredString(mc.font, Component.literal("Current Room: " + code), 0, 0, CommonColors.LIGHT_GRAY);
+            graphics.drawCenteredString(mc.font, 
+                Component.literal("Room: " + code), 
+                0, 0, CommonColors.LIGHT_GRAY);
         });
 
-        // Draw room depth
+        // Draw room depth with more visibility
         player.getExistingData(CMDataAttachments.CURRENT_ROOM_DEPTH).ifPresent(depth -> {
-            graphics.drawCenteredString(mc.font, Component.literal("Room Depth: " + depth), 0, 12, CommonColors.LIGHT_GRAY);
+            graphics.drawCenteredString(mc.font, Component.literal("Depth: " + depth), 0, 12, CommonColors.GREEN);
         });
     }
 

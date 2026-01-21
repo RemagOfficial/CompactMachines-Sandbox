@@ -1,6 +1,7 @@
 package dev.compactmods.machines.network.room;
 
 import dev.compactmods.machines.api.CompactMachines;
+import dev.compactmods.machines.api.attachment.CMDataAttachments;
 import dev.compactmods.machines.client.room.ClientRoomPacketHandler;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.FriendlyByteBuf;
@@ -23,7 +24,7 @@ public record SyncRoomMetadataPacket(String roomCode, int depth, UUID owner) imp
   );
 
   public static final IPayloadHandler<SyncRoomMetadataPacket> HANDLER = (pkt, ctx) -> {
-	 ClientRoomPacketHandler.handleRoomSync(pkt.roomCode);
+	 ClientRoomPacketHandler.handleRoomSync(pkt.roomCode, pkt.depth);
   };
 
   @Override
