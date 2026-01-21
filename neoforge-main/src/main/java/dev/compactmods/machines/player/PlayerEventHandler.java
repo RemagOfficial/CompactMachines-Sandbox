@@ -20,7 +20,8 @@ public class PlayerEventHandler {
 
         if(player instanceof ServerPlayer serverPlayer) {
             final var currentRoom = serverPlayer.getExistingData(CMDataAttachments.CURRENT_ROOM_CODE);
-            currentRoom.ifPresent(roomCode -> PacketDistributor.sendToPlayer(serverPlayer, new SyncRoomMetadataPacket(roomCode, Util.NIL_UUID)));
+            final var depth = serverPlayer.getExistingData(CMDataAttachments.CURRENT_ROOM_DEPTH);
+            currentRoom.ifPresent(roomCode -> PacketDistributor.sendToPlayer(serverPlayer, new SyncRoomMetadataPacket(roomCode, depth.orElse(0), Util.NIL_UUID)));
         }
     }
 }

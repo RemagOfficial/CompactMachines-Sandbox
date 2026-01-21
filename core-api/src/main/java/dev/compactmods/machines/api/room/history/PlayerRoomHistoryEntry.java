@@ -8,12 +8,14 @@ import net.minecraft.util.ExtraCodecs;
  * A historical record of a player entering a compact machine room.
  *
  * @param roomCode   The room being entered.
+ * @param roomDepth The depth of the room being entered.
  * @param instant
  * @param entryPoint The last position the player was in, and how they entered.
  */
-public record PlayerRoomHistoryEntry(String roomCode, java.time.Instant instant, RoomEntryPoint entryPoint) {
+public record PlayerRoomHistoryEntry(String roomCode, int roomDepth, java.time.Instant instant, RoomEntryPoint entryPoint) {
     public static final Codec<PlayerRoomHistoryEntry> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             Codec.STRING.fieldOf("room").forGetter(PlayerRoomHistoryEntry::roomCode),
+            Codec.INT.fieldOf("depth").forGetter(PlayerRoomHistoryEntry::roomDepth),
             ExtraCodecs.INSTANT_ISO8601.fieldOf("timestamp").forGetter(PlayerRoomHistoryEntry::instant),
             RoomEntryPoint.CODEC.fieldOf("entry_point").forGetter(PlayerRoomHistoryEntry::entryPoint)
     ).apply(inst, PlayerRoomHistoryEntry::new));

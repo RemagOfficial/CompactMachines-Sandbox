@@ -14,6 +14,8 @@ public interface IRoomBuilder {
 
     IRoomBuilder owner(UUID owner);
 
+    IRoomBuilder depth(int depth);
+
     IRoomBuilder defaultMachineColor(MachineColor color);
 
     default RoomInstance build() {

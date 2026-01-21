@@ -20,6 +20,7 @@ public interface CMDataComponents {
 
     String KEY_ROOM_TEMPLATE = "room_template";
     String KEY_ROOM_CODE = "room_code";
+    String KEY_DEPTH = "depth";
     String KEY_MACHINE_COLOR = "machine_color";
 
     DeferredHolder<DataComponentType<?>, DataComponentType<RoomUpgradeComponentList>> UPGRADE_LIST_COMPONENT = DATA_COMPONENTS
@@ -35,6 +36,11 @@ public interface CMDataComponents {
             .registerComponentType(KEY_ROOM_CODE, (builder) -> builder
                     .persistent(Codec.STRING)
                     .networkSynchronized(ByteBufCodecs.STRING_UTF8));
+
+    DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> BOUND_DEPTH = DATA_COMPONENTS
+            .registerComponentType("bound_depth", (builder) -> builder
+                    .persistent(Codec.INT)
+                    .networkSynchronized(ByteBufCodecs.INT));
 
 
     DeferredHolder<DataComponentType<?>, DataComponentType<MachineColor>> MACHINE_COLOR = DATA_COMPONENTS

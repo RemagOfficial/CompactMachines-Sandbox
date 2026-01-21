@@ -33,15 +33,15 @@ public class GraphChunkManager implements IRoomChunkManager {
 
         CompactMachines.roomRegistrar(server)
                 .allRooms()
-                .forEach(inst -> calculateChunks(inst.code(), inst.boundaries()));
+                .forEach(inst -> calculateChunks(inst.code(), inst.depth(), inst.boundaries()));
     }
 
     @Override
-    public void calculateChunks(String roomCode, IRoomBoundaries boundaries) {
+    public void calculateChunks(String roomCode, int depth, IRoomBoundaries boundaries) {
         final var outer = boundaries.outerBounds();
         final var allInside = MathUtil.getChunksFromAABB(outer).collect(Collectors.toSet());
 
-        final var ref = new RoomReferenceNode(roomCode);
+        final var ref = new RoomReferenceNode(roomCode, depth);
         graph.addNode(ref);
 
         for (var c : allInside) {

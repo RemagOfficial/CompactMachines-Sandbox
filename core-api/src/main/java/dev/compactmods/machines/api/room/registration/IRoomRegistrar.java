@@ -22,8 +22,8 @@ public interface IRoomRegistrar extends Saveable {
 
     IRoomBuilder builder();
 
-    default RoomInstance createNew(RoomTemplate template, UUID owner) {
-        return createNew(template, owner, override -> {});
+    default RoomInstance createNew(RoomTemplate template, UUID owner, int depth) {
+        return createNew(template, owner, builder -> builder.depth(depth));
     }
 
     default RoomInstance createNew(RoomTemplate template, UUID owner, Consumer<IRoomBuilder> override) {

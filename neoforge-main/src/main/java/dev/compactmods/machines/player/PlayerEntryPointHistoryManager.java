@@ -90,7 +90,7 @@ public class PlayerEntryPointHistoryManager implements CodecHolder<PlayerEntryPo
     }
 
     private static PlayerRoomHistoryEntry fromEdge(PlayerRoomEntryEdge edge) {
-        return new PlayerRoomHistoryEntry(edge.target().get().code(), edge.entryTime(), edge.source().get().data());
+        return new PlayerRoomHistoryEntry(edge.target().get().code(), edge.target().get().depth(), edge.entryTime(), edge.source().get().data());
     }
 
     public void popHistory(Player player, int steps) {
@@ -146,7 +146,7 @@ public class PlayerEntryPointHistoryManager implements CodecHolder<PlayerEntryPo
         if (depth >= maxDepth)
             return RoomEntryResult.FAILED_TOO_FAR_DOWN;
 
-        RoomReferenceNode roomNode = getOrCreateRoom(history.roomCode());
+        RoomReferenceNode roomNode = getOrCreateRoom(history.roomCode(), history.roomDepth());
 
         PlayerEntryPointNode entryNode = new PlayerEntryPointNode(UUID.randomUUID(), history.entryPoint());
         if (latestEntryPoints.containsKey(player)) {
@@ -165,14 +165,14 @@ public class PlayerEntryPointHistoryManager implements CodecHolder<PlayerEntryPo
         return RoomEntryResult.SUCCESS;
     }
 
-    public RoomEntryResult enterRoom(Player player, String roomCode, RoomEntryPoint entryPoint) {
-        return enterRoom(player.getUUID(), new PlayerRoomHistoryEntry(roomCode, Instant.now(), entryPoint));
+    public RoomEntryResult enterRoom(Player player, String roomCode, int roomDepth, RoomEntryPoint entryPoint) {
+        return enterRoom(player.getUUID(), new PlayerRoomHistoryEntry(roomCode, roomDepth, Instant.now(), entryPoint));
     }
 
     @NotNull
-    private RoomReferenceNode getOrCreateRoom(String roomCode) {
+    private RoomReferenceNode getOrCreateRoom(String roomCode, int roomDepth) {
         return roomNodes.computeIfAbsent(roomCode, (code) -> {
-            var node = new RoomReferenceNode(roomCode);
+            var node = new RoomReferenceNode(roomCode, roomDepth);
             graph.addNode(node);
             return node;
         });

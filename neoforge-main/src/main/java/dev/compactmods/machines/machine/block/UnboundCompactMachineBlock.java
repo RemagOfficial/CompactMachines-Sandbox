@@ -14,6 +14,7 @@ import dev.compactmods.machines.room.RoomHelper;
 import dev.compactmods.machines.room.Rooms;
 import dev.compactmods.machines.shrinking.PersonalShrinkingDevice;
 import dev.compactmods.machines.shrinking.Shrinking;
+import dev.compactmods.machines.util.PlayerDepthHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.MinecraftServer;
@@ -83,8 +84,10 @@ public class UnboundCompactMachineBlock extends CompactMachineBlock implements E
 
 					try {
 						// Generate a new machine room
-						final var newRoom = CompactMachines.newRoom(server, template, sp.getUUID());
-						newRoom.setData(CMDataAttachments.ROOM_OWNER, player.getUUID());
+                        int playerDepth = PlayerDepthHelper.getPlayerDepth(player);
+                        int roomDepth = playerDepth + 1;
+                        final var newRoom = CompactMachines.newRoom(server, template, sp.getUUID(), roomDepth);
+                        newRoom.setData(CMDataAttachments.ROOM_OWNER, player.getUUID());
 
 						// Change into a bound machine block
 						level.setBlock(pos, Machines.Blocks.BOUND_MACHINE.get().defaultBlockState(), Block.UPDATE_ALL);
@@ -92,6 +95,7 @@ public class UnboundCompactMachineBlock extends CompactMachineBlock implements E
 						// Set up binding and enter
 						level.getBlockEntity(pos, Machines.BlockEntities.MACHINE.get()).ifPresent(ent -> {
 							ent.setConnectedRoom(newRoom.code());
+                            ent.setDepth(newRoom.depth());
                             ent.setOwner(sp.getUUID());
 							ent.setData(CMDataAttachments.MACHINE_COLOR, color);
 

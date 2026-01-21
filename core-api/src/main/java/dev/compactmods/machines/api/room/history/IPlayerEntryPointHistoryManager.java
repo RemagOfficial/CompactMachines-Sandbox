@@ -19,7 +19,7 @@ public interface IPlayerEntryPointHistoryManager {
 
    RoomEntryResult enterRoom(UUID player, PlayerRoomHistoryEntry history);
 
-   RoomEntryResult enterRoom(Player player, String roomCode, RoomEntryPoint entryPoint);
+   RoomEntryResult enterRoom(Player player, String roomCode, int roomDepth, RoomEntryPoint entryPoint);
 
    void clearHistory(ServerPlayer player);
 }

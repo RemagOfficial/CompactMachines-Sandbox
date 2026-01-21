@@ -21,6 +21,8 @@ public abstract class PlayerUtil {
     public static void resetPlayerHistory(@NotNull ServerPlayer player) {
         final var history = CompactMachines.playerHistoryApi();
         player.removeData(CMDataAttachments.LAST_ROOM_ENTRYPOINT);
+        player.removeData(CMDataAttachments.CURRENT_ROOM_CODE);
+        player.removeData(CMDataAttachments.CURRENT_ROOM_DEPTH);
         history.entryPoints().clearHistory(player);
         history.save();
     }

@@ -7,6 +7,7 @@ import dev.compactmods.machines.api.machine.block.ICompactMachineBlockEntity;
 import dev.compactmods.machines.machine.MachineColors;
 import dev.compactmods.machines.machine.Machines;
 import dev.compactmods.machines.network.machine.MachineColorSyncPacket;
+import dev.compactmods.machines.util.PlayerDepthHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.server.level.ServerLevel;
@@ -35,8 +36,19 @@ public class CompactMachineBlock extends Block {
 
         final var color = pStack.getOrDefault(CMDataComponents.MACHINE_COLOR, MachineColors.WHITE);
         final var be = level.getBlockEntity(pPos);
-        if(be != null)
+        if (be != null) {
             be.setData(CMDataAttachments.MACHINE_COLOR, color);
+            
+            // Set depth to player's depth + 1 when placing a new machine
+            if (pPlacer instanceof Player player && be instanceof BoundCompactMachineBlockEntity machine) {
+                int playerDepth = PlayerDepthHelper.getPlayerDepth(player);
+                int newDepth = playerDepth + 1;
+                machine.setDepth(newDepth);
+                
+                // Update player's depth to the new machine's depth
+                PlayerDepthHelper.setPlayerDepth(player, newDepth);
+            }
+        }
     }
 
     @NotNull

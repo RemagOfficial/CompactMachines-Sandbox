@@ -24,6 +24,11 @@ public class RoomMetadataDebugOverlay implements LayeredDraw.Layer {
         player.getExistingData(CMDataAttachments.CURRENT_ROOM_CODE).ifPresent(code -> {
             graphics.drawCenteredString(mc.font, Component.literal("Current Room: " + code), 0, 0, CommonColors.LIGHT_GRAY);
         });
+
+        // Draw room depth
+        player.getExistingData(CMDataAttachments.CURRENT_ROOM_DEPTH).ifPresent(depth -> {
+            graphics.drawCenteredString(mc.font, Component.literal("Room Depth: " + depth), 0, 12, CommonColors.LIGHT_GRAY);
+        });
     }
 
     private static void drawRoomOwnerInfo(GuiGraphics graphics, Font font, PoseStack poseStack, UUID owner) {

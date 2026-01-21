@@ -28,9 +28,9 @@ public class PlayerHistoryTrackerTests {
         final var history = new PlayerEntryPointHistoryManager(1);
 
         final var player = test.makeMockPlayer(GameType.SURVIVAL);
-        history.enterRoom(player, RoomCodeGenerator.generateRoomId(), RoomEntryPoint.nonexistent());
+        history.enterRoom(player, RoomCodeGenerator.generateRoomId(), 0, RoomEntryPoint.nonexistent());
 
-        final var tooFar = history.enterRoom(player, RoomCodeGenerator.generateRoomId(), RoomEntryPoint.nonexistent());
+        final var tooFar = history.enterRoom(player, RoomCodeGenerator.generateRoomId(), 0, RoomEntryPoint.nonexistent());
 
         test.assertTrue(tooFar == RoomEntryResult.FAILED_TOO_FAR_DOWN, "Room entry should have failed.");
 

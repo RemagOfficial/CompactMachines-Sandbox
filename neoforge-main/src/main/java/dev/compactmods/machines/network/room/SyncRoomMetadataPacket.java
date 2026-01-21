@@ -11,12 +11,13 @@ import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
 import java.util.UUID;
 
-public record SyncRoomMetadataPacket(String roomCode, UUID owner) implements CustomPacketPayload {
+public record SyncRoomMetadataPacket(String roomCode, int depth, UUID owner) implements CustomPacketPayload {
 
   public static final Type<SyncRoomMetadataPacket> TYPE = new Type<>(CompactMachines.modRL("sync_room_metadata"));
 
   public static final StreamCodec<FriendlyByteBuf, SyncRoomMetadataPacket> STREAM_CODEC = StreamCodec.composite(
 		ByteBufCodecs.STRING_UTF8, SyncRoomMetadataPacket::roomCode,
+        ByteBufCodecs.INT, SyncRoomMetadataPacket::depth,
 		UUIDUtil.STREAM_CODEC, SyncRoomMetadataPacket::owner,
 		SyncRoomMetadataPacket::new
   );

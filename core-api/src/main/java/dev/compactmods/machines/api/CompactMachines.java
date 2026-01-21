@@ -151,35 +151,36 @@ public class CompactMachines {
 	 * @param server   Server to generate room on.
 	 * @param template
 	 * @param owner
+     * @param depth
 	 * @return
 	 */
-	public static RoomInstance newRoom(MinecraftServer server, RoomTemplate template, UUID owner) throws MissingDimensionException {
-		final var instance = roomRegistrar(server).createNew(template, owner);
-		final var compactDim = CompactDimension.forServer(server);
-		CompactRoomGenerator.generateRoom(compactDim, instance.boundaries().outerBounds());
+    public static RoomInstance newRoom(MinecraftServer server, RoomTemplate template, UUID owner, int depth) throws MissingDimensionException {
+        final var instance = roomRegistrar(server).createNew(template, owner, depth);
+        final var compactDim = CompactDimension.forServer(server);
+        CompactRoomGenerator.generateRoom(compactDim, instance.boundaries().outerBounds());
 
-		if (!template.structures().isEmpty()) {
-			for (var struct : template.structures()) {
-				CompactRoomGenerator.populateStructure(compactDim, struct.template(), instance.boundaries().innerBounds(), struct.placement());
-			}
-		}
+        if (!template.structures().isEmpty()) {
+            for (var struct : template.structures()) {
+                CompactRoomGenerator.populateStructure(compactDim, struct.template(), instance.boundaries().innerBounds(), struct.placement());
+            }
+        }
 
-		final var spawnManager = SPAWN_MANAGERS.get(instance.code());
-		template.optionalFloor().ifPresent(floorState -> {
-			var fixedSpawn = instance.boundaries()
-				.defaultSpawn()
-				.add(0, 1, 0);
+        final var spawnManager = SPAWN_MANAGERS.get(instance.code());
+        template.optionalFloor().ifPresent(floorState -> {
+            var fixedSpawn = instance.boundaries()
+                    .defaultSpawn()
+                    .add(0, 1, 0);
 
-			spawnManager.setDefaultSpawn(fixedSpawn, Vec2.ZERO);
+            spawnManager.setDefaultSpawn(fixedSpawn, Vec2.ZERO);
 
-			AABB floorBounds = BlockSpaceUtil.getWallBounds(instance.boundaries().innerBounds(), Direction.DOWN);
-			BlockSpaceUtil.blocksInside(floorBounds).forEach(floorBlockPos -> {
-				compactDim.setBlock(floorBlockPos, floorState, Block.UPDATE_ALL);
-			});
-		});
+            AABB floorBounds = BlockSpaceUtil.getWallBounds(instance.boundaries().innerBounds(), Direction.DOWN);
+            BlockSpaceUtil.blocksInside(floorBounds).forEach(floorBlockPos -> {
+                compactDim.setBlock(floorBlockPos, floorState, Block.UPDATE_ALL);
+            });
+        });
 
-		return instance;
-	}
+        return instance;
+    }
 
 	public static IRoomDataAttachmentAccessor roomDataAccessor() {
 		return ROOM_DATA_ACCESSOR;

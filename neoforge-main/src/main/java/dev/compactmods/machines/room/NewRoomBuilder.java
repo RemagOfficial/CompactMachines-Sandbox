@@ -16,10 +16,11 @@ import java.util.UUID;
 
 public class NewRoomBuilder implements IRoomBuilder {
     private final String code;
+    private int depth = 0; // Default to 0, will be overridden
     private MachineColor color = MachineColors.WHITE;
 
     private AABB boundaries = AABB.ofSize(Vec3.ZERO, 1, 1, 1);
-    UUID owner;
+    private UUID owner;
 
     public NewRoomBuilder() {
         this.code = RoomCodeGenerator.generateRoomId();
@@ -50,7 +51,13 @@ public class NewRoomBuilder implements IRoomBuilder {
         return this;
     }
 
+    @Override
+    public NewRoomBuilder depth(int depth) {
+        this.depth = depth;
+        return this;
+    }
+
     public RoomInstance build(MinecraftServer server) {
-        return new RoomInstance(server, CompactDimension.LEVEL_KEY, code, color, () -> boundaries);
+        return new RoomInstance(server, CompactDimension.LEVEL_KEY, code, depth, color, () -> boundaries);
     }
 }

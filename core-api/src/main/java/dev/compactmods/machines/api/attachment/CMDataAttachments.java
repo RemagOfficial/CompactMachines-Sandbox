@@ -41,6 +41,11 @@ public interface CMDataAttachments {
             .serialize(Codec.STRING)
             .build());
 
+    Supplier<AttachmentType<Integer>> CURRENT_ROOM_DEPTH = ATTACHMENT_TYPES.register("current_room_depth", () -> AttachmentType
+            .builder(() -> 0)
+            .serialize(Codec.INT)
+            .build());
+
     Supplier<AttachmentType<UUID>> ROOM_OWNER = ATTACHMENT_TYPES.register("room_owner", () -> AttachmentType
             .builder(() -> Util.NIL_UUID)
             .serialize(UUIDUtil.CODEC)

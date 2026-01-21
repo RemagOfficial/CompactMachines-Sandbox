@@ -23,24 +23,25 @@ public record RoomRegistrationNode(UUID id, Data data) implements Node<RoomRegis
             Data.CODEC.fieldOf("data").forGetter(RoomRegistrationNode::data)
     ).apply(i, RoomRegistrationNode::new));
 
-    public record Data(String code, MachineColor defaultMachineColor, AABB boundaries) {
+    public record Data(String code, int depth, MachineColor defaultMachineColor, AABB boundaries) {
         public static final Codec<Data> CODEC = RecordCodecBuilder.create(i -> i.group(
                 Codec.STRING.fieldOf("code").forGetter(Data::code),
+                Codec.INT.fieldOf("depth").forGetter(Data::depth),
                 MachineColor.CODEC.fieldOf("color").forGetter(Data::defaultMachineColor),
                 Vec3.CODEC.fieldOf("dimensions").forGetter(Data::dimensions),
                 Vec3.CODEC.fieldOf("center").forGetter(x -> x.boundaries.getCenter())
         ).apply(i, Data::new));
 
         public Data(RoomInstance inst) {
-            this(inst.code(), inst.defaultMachineColor(), inst.boundaries().outerBounds());
+            this(inst.code(), inst.depth(), inst.defaultMachineColor(), inst.boundaries().outerBounds());
         }
 
         private Vec3 dimensions() {
             return new Vec3(boundaries.getXsize(), boundaries.getYsize(), boundaries.getZsize());
         }
 
-        private Data(String code, MachineColor defaultMachineColor, Vec3 dimensions, Vec3 center) {
-            this(code, defaultMachineColor, AABB.ofSize(center, dimensions.x(), dimensions.y(), dimensions.z()));
+        private Data(String code, int depth, MachineColor defaultMachineColor, Vec3 dimensions, Vec3 center) {
+            this(code, depth, defaultMachineColor, AABB.ofSize(center, dimensions.x(), dimensions.y(), dimensions.z()));
         }
     }
 
@@ -48,6 +49,10 @@ public record RoomRegistrationNode(UUID id, Data data) implements Node<RoomRegis
 
     public String code() {
         return data.code;
+    }
+
+    public int depth() {
+        return data.depth;
     }
 
     public MachineColor defaultMachineColor() {

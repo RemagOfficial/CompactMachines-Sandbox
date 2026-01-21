@@ -28,6 +28,7 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
 
    protected UUID owner;
    private String roomCode;
+   private int depth;
 
    @Nullable
    private Component customName;
@@ -40,6 +41,7 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
 	protected void applyImplicitComponents(DataComponentInput components) {
 		super.applyImplicitComponents(components);
 		this.roomCode = components.get(CMDataComponents.BOUND_ROOM_CODE);
+        this.depth = components.getOrDefault(CMDataComponents.BOUND_DEPTH, 0);
         this.customName = components.get(DataComponents.CUSTOM_NAME);
 
 		final var desiredColor = components.get(CMDataComponents.MACHINE_COLOR);
@@ -53,6 +55,7 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
 		super.collectImplicitComponents(builder);
         builder.set(DataComponents.CUSTOM_NAME, this.customName);
 		builder.set(CMDataComponents.BOUND_ROOM_CODE, this.roomCode);
+        builder.set(CMDataComponents.BOUND_DEPTH, this.depth);
 		builder.set(CMDataComponents.MACHINE_COLOR, this.getData(CMDataAttachments.MACHINE_COLOR));
 	}
 
@@ -61,6 +64,7 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
 		super.removeComponentsFromTag(tag);
         tag.remove("CustomName");
 		tag.remove(CMDataComponents.KEY_ROOM_CODE);
+        tag.remove(CMDataComponents.KEY_DEPTH);
 		tag.remove(CMDataComponents.KEY_MACHINE_COLOR);
 	}
 
@@ -69,6 +73,7 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
 	  super.loadAdditional(nbt, holders);
       this.customName = nbt.read("CustomName", ComponentSerialization.CODEC).orElse(null);
       this.roomCode = nbt.read(NBT_ROOM_CODE, Codec.STRING).orElse(null);
+      this.depth = nbt.read(NBT_DEPTH, Codec.INT).orElse(null);
       this.owner = nbt.read(NBT_OWNER, UUIDUtil.CODEC).orElse(null);
    }
 
@@ -77,6 +82,7 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
 	  super.saveAdditional(nbt, holders);
       nbt.storeNullable("CustomName", ComponentSerialization.CODEC, this.customName);
       nbt.storeNullable(NBT_ROOM_CODE, Codec.STRING, this.roomCode);
+      nbt.storeNullable(NBT_DEPTH, Codec.INT, this.depth);
       nbt.storeNullable(NBT_OWNER, UUIDUtil.CODEC, this.owner);
    }
 
@@ -95,20 +101,26 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
 	  return GlobalPos.of(level.dimension(), worldPosition);
    }
 
-   public void setConnectedRoom(String roomCode) {
-	  if (level != null && !level.isClientSide()) {
-		 this.roomCode = roomCode;
+    public void setConnectedRoom(String roomCode) {
+        if (level != null && !level.isClientSide()) {
+            this.roomCode = roomCode;
 
-		 CompactMachines.room(roomCode).ifPresentOrElse(inst -> {
-				this.setData(CMDataAttachments.MACHINE_COLOR, inst.defaultMachineColor());
-			 },
-			 () -> {
-				this.setData(CMDataAttachments.MACHINE_COLOR, MachineColors.WHITE);
-			 });
+            CompactMachines.room(roomCode).ifPresentOrElse(inst -> {
+                        this.setData(CMDataAttachments.MACHINE_COLOR, inst.defaultMachineColor());
+                        this.depth = inst.depth(); // Sync machine depth with room depth
+                    },
+                    () -> {
+                        this.setData(CMDataAttachments.MACHINE_COLOR, MachineColors.WHITE);
+                    });
 
-		 this.setChanged();
-	  }
-   }
+            this.setChanged();
+        }
+    }
+
+    public void setDepth(int depth) {
+        this.depth = depth;
+        this.setChanged();
+    }
 
    @NotNull
    public String connectedRoom() {

@@ -13,6 +13,7 @@ import dev.compactmods.machines.api.room.history.RoomExitResult;
 import dev.compactmods.machines.dimension.CompactDimensionTransitions;
 import dev.compactmods.machines.network.room.SyncRoomMetadataPacket;
 import dev.compactmods.machines.shrinking.Shrinking;
+import dev.compactmods.machines.util.PlayerDepthHelper;
 import dev.compactmods.machines.util.PlayerUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
@@ -50,7 +51,7 @@ public abstract class RoomHelper {
         final var compactDim = CompactDimension.forServer(serv);
 
         final var history = CompactMachines.playerHistoryApi().entryPoints();
-        final var result = history.enterRoom(player, room.code(), entryPoint);
+        final var result = history.enterRoom(player, room.code(), room.depth(), entryPoint);
 
         if(result == RoomEntryResult.FAILED_TOO_FAR_DOWN) {
             player.displayClientMessage(Component.translatableWithFallback("compactmachines.errors.too_far_down", "An otherworldly force prevents you from shrinking more.")
@@ -61,8 +62,13 @@ public abstract class RoomHelper {
         }
 
         if(result.successful()) {
+            // Update player's depth to the room's depth
+            int newDepth = room.depth();
+            PlayerDepthHelper.setPlayerDepth(player, newDepth);
+            
             // Mark current room
             player.setData(CMDataAttachments.CURRENT_ROOM_CODE, room.code());
+            player.setData(CMDataAttachments.CURRENT_ROOM_DEPTH, newDepth);
             player.setData(CMDataAttachments.LAST_ROOM_ENTRYPOINT, RoomEntryPoint.playerEnteringMachine(player));
 
             return serv.submit(() -> {
@@ -72,7 +78,7 @@ public abstract class RoomHelper {
                 final var spawn = spawns.forPlayer(player.getUUID()).orElse(spawns.defaultSpawn());
                 player.changeDimension(CompactDimensionTransitions.to(compactDim, spawn.position(), spawn.rotation()));
 
-                PacketDistributor.sendToPlayer(player, new SyncRoomMetadataPacket(room.code(), Util.NIL_UUID));
+                PacketDistributor.sendToPlayer(player, new SyncRoomMetadataPacket(room.code(), room.depth(), Util.NIL_UUID));
 
                 return result;
             });
@@ -82,8 +88,10 @@ public abstract class RoomHelper {
     }
 
     public static CompletableFuture<RoomExitResult> teleportPlayerOutOfRoom(@Nonnull ServerPlayer serverPlayer) {
-        if (!CompactDimension.isLevelCompact(serverPlayer.level()))
+
+        if (!CompactDimension.isLevelCompact(serverPlayer.level())) {
             return CompletableFuture.completedFuture(RoomExitResult.FAILED_NOT_IN_COMPACT_DIM);
+        }
 
         MinecraftServer serv = serverPlayer.getServer();
         assert serv != null;
@@ -91,33 +99,58 @@ public abstract class RoomHelper {
         final IPlayerEntryPointHistoryManager history = CompactMachines.playerHistoryApi().entryPoints();
 
         return serv.submit(() -> {
-            final var lastHistory = history.lastHistory(serverPlayer).orElse(null);
-            if(lastHistory != null) {
-                serverPlayer.getCooldowns().addCooldown(Shrinking.PERSONAL_SHRINKING_DEVICE.get(), 25);
+            final var currentHistory = history.lastHistory(serverPlayer).orElse(null);
+            if(currentHistory != null) {
 
-                serverPlayer.setData(CMDataAttachments.LAST_ROOM_ENTRYPOINT, lastHistory.entryPoint());
+                // Pop the current history entry to get to the previous one
                 history.popHistory(serverPlayer, 1);
 
-                serverPlayer.setData(CMDataAttachments.CURRENT_ROOM_CODE, lastHistory.roomCode());
+                // Get the previous history entry (or null if this was the last one)
+                final var previousHistory = history.lastHistory(serverPlayer).orElse(null);
+                if (previousHistory != null) {
 
-                final var location = lastHistory.entryPoint().entryLocation();
-                final var level = serv.getLevel(location.dimension());
-                if (level != null) {
-                    LOGS.debug("Teleporting player {} to {} as they jump up a level...", serverPlayer.getUUID(), location);
-                    serverPlayer.changeDimension(CompactDimensionTransitions.to(level, location.position(), location.rotation()));
+                    serverPlayer.getCooldowns().addCooldown(Shrinking.PERSONAL_SHRINKING_DEVICE.get(), 25);
 
-                    return RoomExitResult.SUCCESS_WENT_TO_LAST_ENTRYPOINT;
+                    String newRoomCode = previousHistory.roomCode();
+
+                    history.popHistory(serverPlayer, 1);
+
+                    // Get the previous room's depth from history
+                    int newDepth = Math.max(0, previousHistory.roomDepth());
+
+                    // Decrement depth by 1 to match the room we're returning to
+                    PlayerDepthHelper.setPlayerDepth(serverPlayer, newDepth);
+
+                    // Update the player's current room data
+                    serverPlayer.setData(CMDataAttachments.CURRENT_ROOM_CODE, newRoomCode);
+                    serverPlayer.setData(CMDataAttachments.CURRENT_ROOM_DEPTH, newDepth);
+                    serverPlayer.setData(CMDataAttachments.LAST_ROOM_ENTRYPOINT, previousHistory.entryPoint());
+
+                    final var location = currentHistory.entryPoint().entryLocation();
+                    final var level = serv.getLevel(location.dimension());
+                    if (level != null) {
+                        serverPlayer.changeDimension(CompactDimensionTransitions.to(level, location.position(), location.rotation()));
+                        return RoomExitResult.SUCCESS_WENT_TO_LAST_ENTRYPOINT;
+                    } else {
+                        LOGS.error("Player tracking points to an unknown dimension. Teleporting player {} to their default spawn instead.", serverPlayer.getUUID());
+                        PlayerUtil.teleportPlayerToRespawnOrOverworld(serv, serverPlayer);
+                        return RoomExitResult.SUCCESS_WENT_TO_SPAWN;
+                    }
                 } else {
-                    LOGS.error("Player tracking points to an unknown dimension. Teleporting player {} to their default spawn instead.", serverPlayer.getUUID());
+                    PlayerDepthHelper.setPlayerDepth(serverPlayer, 0);
+                    serverPlayer.removeData(CMDataAttachments.LAST_ROOM_ENTRYPOINT);
+                    serverPlayer.removeData(CMDataAttachments.CURRENT_ROOM_CODE);
+                    serverPlayer.removeData(CMDataAttachments.CURRENT_ROOM_DEPTH);
                     PlayerUtil.teleportPlayerToRespawnOrOverworld(serv, serverPlayer);
 
                     return RoomExitResult.SUCCESS_WENT_TO_SPAWN;
                 }
-
             } else {
+                PlayerDepthHelper.setPlayerDepth(serverPlayer, 0);
                 serverPlayer.removeData(CMDataAttachments.LAST_ROOM_ENTRYPOINT);
+                serverPlayer.removeData(CMDataAttachments.CURRENT_ROOM_CODE);
+                serverPlayer.removeData(CMDataAttachments.CURRENT_ROOM_DEPTH);
                 PlayerUtil.teleportPlayerToRespawnOrOverworld(serv, serverPlayer);
-
                 return RoomExitResult.SUCCESS_WENT_TO_SPAWN;
             }
         });

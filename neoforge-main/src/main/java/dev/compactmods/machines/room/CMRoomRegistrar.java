@@ -82,8 +82,22 @@ public class CMRoomRegistrar implements IRoomRegistrar, AutoCloseable {
 
     @Override
     public RoomInstance createNew(RoomTemplate template, UUID owner, Consumer<IRoomBuilder> override) {
-        final Consumer<IRoomBuilder> preOverride = builder -> builder.defaultMachineColor(template.defaultMachineColor())
+        return createNew(template, owner, override, 0);
+    }
+    
+    /**
+     * Creates a new room with the specified depth.
+     * @param template The room template to use
+     * @param owner The UUID of the room owner
+     * @param override Consumer to modify the room builder
+     * @param depth The depth of the new room
+     * @return The created room instance
+     */
+    public RoomInstance createNew(RoomTemplate template, UUID owner, Consumer<IRoomBuilder> override, int depth) {
+        final Consumer<IRoomBuilder> preOverride = builder -> builder
+                .defaultMachineColor(template.defaultMachineColor())
                 .owner(owner)
+                .depth(depth)
                 .boundaries(getNextBoundaries(template));
 
         // Make builder, set template defaults, then allow overrides
@@ -97,7 +111,7 @@ public class CMRoomRegistrar implements IRoomRegistrar, AutoCloseable {
 
         ROOM_REGISTRAR_DATA.data().put(node);
 
-        CompactMachines.chunkManager().calculateChunks(inst.code(), node);
+        CompactMachines.chunkManager().calculateChunks(inst.code(), inst.depth(), node);
 
         instanceCache.put(inst.code(), inst);
         return inst;
@@ -108,7 +122,7 @@ public class CMRoomRegistrar implements IRoomRegistrar, AutoCloseable {
         if (instanceCache.containsKey(regNode.code()))
             return instanceCache.get(regNode.code());
 
-        final var inst = new RoomInstance(server, CompactDimension.LEVEL_KEY, regNode.code(), regNode.defaultMachineColor(), regNode);
+        final var inst = new RoomInstance(server, CompactDimension.LEVEL_KEY, regNode.code(), regNode.depth(), regNode.defaultMachineColor(), regNode);
         instanceCache.put(regNode.code(), inst);
         return inst;
     }
