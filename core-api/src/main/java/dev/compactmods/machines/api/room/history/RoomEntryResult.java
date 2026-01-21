@@ -3,7 +3,8 @@ package dev.compactmods.machines.api.room.history;
 public enum RoomEntryResult {
     SUCCESS(true),
     FAILED_TOO_FAR_DOWN(false),
-    FAILED_ROOM_INVALID(false);
+    FAILED_ROOM_INVALID(false),
+    FAILED_INSUFFICIENT_DEPTH(false);
 
     private final boolean success;
 

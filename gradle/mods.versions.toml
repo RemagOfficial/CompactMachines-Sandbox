@@ -1,5 +1,7 @@
 [versions]
 jei = "19.22.1.316"
+ftbquests = "2101.1.21"
+ftblib = "2101.1.30"
 
 # Jade
 [libraries.jade]
@@ -26,3 +28,12 @@ version = "2101.7.2-build.247"
 [libraries.rhino]
 module = "dev.latvian.mods:rhino"
 version = "2101.2.6-build.66"
+
+# FTB Quests
+[libraries.ftbquests]
+module = "dev.ftb.mods:ftb-quests-neoforge"
+version.ref = "ftbquests"
+
+[libraries.ftblib]
+module = "dev.ftb.mods:ftb-library-neoforge"
+version.ref = "ftblib"

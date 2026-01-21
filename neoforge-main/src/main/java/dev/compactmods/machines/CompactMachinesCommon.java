@@ -4,6 +4,7 @@ import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.attachment.CMDataAttachments;
 import dev.compactmods.machines.api.component.CMDataComponents;
 import dev.compactmods.machines.command.Commands;
+import dev.compactmods.machines.common.config.CommonConfig;
 import dev.compactmods.machines.compat.InterModCompat;
 import dev.compactmods.machines.feature.CMFeaturePacks;
 import dev.compactmods.machines.gamerule.CMGameRules;
@@ -34,7 +35,8 @@ public class CompactMachinesCommon {
     public static final int BRAND_MACHINE_COLOR = FastColor.ARGB32.color(255, 248, 246, 76);
 
     @SuppressWarnings("unused")
-    public CompactMachinesCommon(IEventBus modBus) {
+    public CompactMachinesCommon(IEventBus modBus, ModContainer modContainer) {
+        modContainer.registerConfig(ModConfig.Type.COMMON, CommonConfig.CONFIG);
         prepare();
         registerEvents(modBus);
 

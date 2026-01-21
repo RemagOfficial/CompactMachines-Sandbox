@@ -46,6 +46,7 @@ public class EnglishLangGenerator extends dev.compactmods.machines.datagen.base.
         // Room Errors
         add(RoomTranslations.IDs.Errors.CANNOT_ENTER_ROOM, "You fumble with the shrinking device, to no avail. It refuses to work.");
         add(RoomTranslations.IDs.Errors.UNKNOWN_ROOM_BY_CODE, "Room [%s] could not be found.");
+        add(RoomTranslations.IDs.Errors.CANNOT_ENTER_ROOM_INSUFFICIENT_DEPTH, "Your maximum depth level is too low to enter this machine. You need at least depth %s.");
 
         // Room Templates
         add(RoomTemplate.I18N_STRUCTURE_GEN_TOOLTIP, "Generates %s structures upon room creation.");
@@ -79,6 +80,7 @@ public class EnglishLangGenerator extends dev.compactmods.machines.datagen.base.
         add(RoomUpgradeUIMapping.NAME, "Open Room Upgrade Screen");
 
         addJade();
+        addFTBQuests();
 
         addGamerule(CMGameRules.ALLOW_SURVIVAL_OUT_OF_BOUNDS_KEY, "Allow Survival OOB", "Allow out-of-bounds survival players");
         addGamerule(CMGameRules.ALLOW_CREATIVE_OUT_OF_BOUNDS_KEY, "Allow Creative OOB", "Allow out-of-bounds creative players");
@@ -113,10 +115,19 @@ public class EnglishLangGenerator extends dev.compactmods.machines.datagen.base.
         add(CommandTranslations.IDs.MACHINE_GIVEN, "Created a new machine item and gave it to %s.");
         add(CommandTranslations.IDs.ROOM_COUNT, "Number of registered rooms: %s");
         add(CommandTranslations.IDs.SPAWN_CHANGED_SUCCESSFULLY, "Spawn point for room [%s] was changed successfully.");
+        add(CommandTranslations.IDs.DEBUG_DEPTH_SET, "Set %s's maximum depth to %s.");
+        add(CommandTranslations.IDs.DEBUG_DEPTH_GET, "%s's maximum depth is %s.");
     }
 
     private void addJade() {
         add("config.jade.plugin_compactmachines.bound_machine", "Bound Compact Machines");
         add("config.jade.plugin_compactmachines.show_owner", "Show Machine Owners");
+    }
+
+    private void addFTBQuests() {
+        add("ftbquests.reward.ftbquests.set_max_depth", "Set Max Depth");
+        add("compactmachines.ftbquests.reward.set_max_depth.depth", "Depth");
+        add("compactmachines.ftbquests.reward.set_max_depth.message", "%s's Max Depth set to %s");
+        add("compactmachines.ftbquests.reward.set_max_depth.title", "Set max depth to %s");
     }
 }

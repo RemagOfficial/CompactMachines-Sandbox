@@ -51,6 +51,8 @@ public interface RoomTranslations {
 
             String CANNOT_ENTER_ROOM = Util.makeDescriptionId("rooms.errors", CompactMachines.modRL("cannot_enter"));
 
+            String CANNOT_ENTER_ROOM_INSUFFICIENT_DEPTH = Util.makeDescriptionId("rooms.errors", CompactMachines.modRL("cannot_enter_insufficient_depth"));
+
             String UNKNOWN_ROOM_BY_PLAYER_CHUNK = Util.makeDescriptionId("rooms.errors", CompactMachines.modRL("unknown_room_chunk"));
 
             String PLAYER_NOT_IN_COMPACT_DIM = Util.makeDescriptionId("rooms.errors", CompactMachines.modRL("player_not_in_compact_dimension"));

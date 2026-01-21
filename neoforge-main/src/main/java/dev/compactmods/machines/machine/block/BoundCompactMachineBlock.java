@@ -73,7 +73,7 @@ public class BoundCompactMachineBlock extends CompactMachineBlock implements Ent
 //
 //            // If there are players inside, check config for break handling
 //            if (hasPlayers) {
-//                EnumMachinePlayersBreakHandling hand = ServerConfig.MACHINE_PLAYER_BREAK_HANDLING.get();
+//                EnumMachinePlayersBreakHandling hand = CommonConfig.MACHINE_PLAYER_BREAK_HANDLING.get();
 //                switch (hand) {
 //                    case UNBREAKABLE:
 //                        return 0;

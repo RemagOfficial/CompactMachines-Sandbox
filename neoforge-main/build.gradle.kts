@@ -194,6 +194,17 @@ repositories {
             includeGroup("dev.latvian.mods")
         }
     }
+    maven("https://maven.ftb.dev/releases") {
+        content {
+            includeGroup("dev.ftb.mods")
+        }
+    }
+
+    maven("https://maven.architectury.dev/") {
+        content {
+            includeGroup("dev.architectury")
+        }
+    }
 }
 
 dependencies {
@@ -208,6 +219,7 @@ dependencies {
         jarJar(coreApi)
     }
 
+    // Test Dependencies
     testImplementation(neoforged.testframework)
     testImplementation("org.junit.jupiter:junit-jupiter:5.7.1")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
@@ -236,9 +248,17 @@ dependencies {
     // KubeJS Support
     compileOnly(mods.kubeJS)
     compileOnly(mods.rhino)
+    
+    // FTB Library for Quests
+    compileOnly(mods.ftblib)
+    implementation(mods.ftblib)
 
     // Jade Support
     compileOnly(mods.jade)
+    
+    // FTB Quests
+    compileOnly(mods.ftbquests)
+    implementation(mods.ftbquests)
 }
 
 var additionalAccessTransformerFiles = mutableListOf<File>()

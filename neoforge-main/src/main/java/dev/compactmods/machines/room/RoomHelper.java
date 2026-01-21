@@ -50,7 +50,19 @@ public abstract class RoomHelper {
             throws MissingDimensionException {
         final var compactDim = CompactDimension.forServer(serv);
 
+        // Check if player can enter the room based on depth
+        if (!PlayerDepthHelper.canEnterRoom(player, room.depth())) {
+            player.displayClientMessage(Component.translatableWithFallback(
+                                    "rooms.errors.compactmachines.cannot_enter_insufficient_depth",
+                                    "Your maximum depth level is too low to enter this machine. You need at least depth " + room.depth(),
+                                    room.depth())
+                            .withStyle(ChatFormatting.RED),
+                    true);
+            return CompletableFuture.completedFuture(RoomEntryResult.FAILED_INSUFFICIENT_DEPTH);
+        }
+
         final var history = CompactMachines.playerHistoryApi().entryPoints();
+
         final var result = history.enterRoom(player, room.code(), room.depth(), entryPoint);
 
         if(result == RoomEntryResult.FAILED_TOO_FAR_DOWN) {

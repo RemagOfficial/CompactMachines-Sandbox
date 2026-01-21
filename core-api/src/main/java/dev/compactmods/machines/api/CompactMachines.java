@@ -41,7 +41,7 @@ import java.util.UUID;
 public class CompactMachines {
 	public final static String MOD_ID = "compactmachines";
 
-	private static final Logger logger = LogManager.getLogger();
+	public static final Logger logger = LogManager.getLogger();
 
 	//region API Cache - NO TOUCHY - This class gives access to these services, or you can service locate them yourself!
 	@ApiStatus.Internal

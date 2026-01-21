@@ -26,5 +26,9 @@ public interface CommandTranslations {
         String ROOM_COUNT = Util.makeDescriptionId("commands.rooms", CompactMachines.modRL("room_reg_count"));
 
         String SPAWN_CHANGED_SUCCESSFULLY = Util.makeDescriptionId("commands.rooms", CompactMachines.modRL("spawn_changed_successfully"));
+
+        String DEBUG_DEPTH_SET = Util.makeDescriptionId("commands.rooms", CompactMachines.modRL("debug_depth_set"));
+
+        String DEBUG_DEPTH_GET = Util.makeDescriptionId("commands.rooms", CompactMachines.modRL("debug_depth_get"));
     }
 }
