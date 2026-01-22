@@ -4,7 +4,7 @@ import org.slf4j.event.Level
 import java.text.SimpleDateFormat
 import java.util.*
 
-var envVersion: String = System.getenv("VERSION") ?: "9.9.9"
+var envVersion: String = System.getenv("VERSION") ?: project.findProperty("mod_version") as String
 if (envVersion.startsWith("v"))
     envVersion = envVersion.trimStart('v')
 
@@ -23,7 +23,7 @@ plugins {
 project.evaluationDependsOn(coreApi.path)
 
 base {
-    archivesName.set(modId)
+    archivesName.set("compactmachinesSE")
     group = "dev.compactmods.compactmachines"
     version = envVersion
 }
