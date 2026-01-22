@@ -12,11 +12,11 @@ config = "compactmachines.mixins.json"
 [[mods]]
 modId = "compactmachines"
 version = "${mod_version}"
-displayName = "Compact Machines"
-authors = "Davenonymous, RobotGryphon"
+displayName = "Compact Machines: Sandbox Edition"
+authors = "Davenonymous, RobotGryphon, Remag"
 description = "It's all so tiny!"
 featureFlags="META-INF/feature_flags.json"
-issueTrackerURL = "https://github.com/CompactMods/CompactMachines/issues"
+issueTrackerURL = "https://github.com/RemagOfficial/CompactMachines-Sandbox/issues"
 displayURL = "https://compactmods.dev"
 
 [[dependencies.compactmachines]]
