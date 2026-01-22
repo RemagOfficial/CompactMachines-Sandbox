@@ -125,7 +125,9 @@ public class EnglishLangGenerator extends dev.compactmods.machines.datagen.base.
     private void addFTBQuests() {
         add("ftbquests.reward.ftbquests.set_max_depth", "Set Max Depth");
         add("compactmachines.ftbquests.reward.set_max_depth.depth", "Depth");
-        add("compactmachines.ftbquests.reward.set_max_depth.message", "%s's Max Depth set to %s");
-        add("compactmachines.ftbquests.reward.set_max_depth.title", "Set max depth to %s");
+        add("compactmachines.ftbquests.reward.set_max_depth.increased", "%s's Max Depth was increased to %s");
+        add("compactmachines.ftbquests.reward.set_max_depth.decreased", "%s's Max Depth was decreased to %s");
+        add("compactmachines.ftbquests.reward.set_max_depth.unchanged", "%s's Max Depth remains at %s");
+        add("compactmachines.ftbquests.reward.set_max_depth.set_title", "Set Max Depth: %s");
     }
 }

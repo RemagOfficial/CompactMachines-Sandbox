@@ -65,24 +65,39 @@ public class SetMaxDepthReward extends Reward {
     }
     
     @Override
+    public MutableComponent getAltTitle() {
+        // Show the absolute depth value since we can't access player's current depth here
+        return Component.translatable(
+            "compactmachines.ftbquests.reward.set_max_depth.set_title",
+            depth
+        );
+    }
+    
+    @Override
     public void claim(ServerPlayer player, boolean notify) {
-        PlayerDepthHelper.setMaxDepth(player, depth);
+        int currentDepth = PlayerDepthHelper.getMaxDepth(player);
+        // Set the depth to the exact value (ensuring it's not negative)
+        int newDepth = Math.max(0, depth);
+        PlayerDepthHelper.setMaxDepth(player, newDepth);
+        
         if (notify) {
+            String messageKey = newDepth > currentDepth 
+                ? "compactmachines.ftbquests.reward.set_max_depth.increased" 
+                : newDepth < currentDepth 
+                    ? "compactmachines.ftbquests.reward.set_max_depth.decreased"
+                    : "compactmachines.ftbquests.reward.set_max_depth.unchanged";
+                
             player.sendSystemMessage(Component.translatable(
-                    "compactmachines.ftbquests.reward.set_max_depth.message",
+                    messageKey,
                     player.getDisplayName(),
-                    depth
+                    newDepth
             ));
         }
     }
     
     @Override
-    public MutableComponent getAltTitle() {
-        return Component.translatable("compactmachines.ftbquests.reward.set_max_depth.title", depth);
-    }
-    
-    @Override
     public String getButtonText() {
-        return "+" + depth;
+        // Just show the number since we can't know if it's an increase or decrease
+        return String.valueOf(depth);
     }
 }
