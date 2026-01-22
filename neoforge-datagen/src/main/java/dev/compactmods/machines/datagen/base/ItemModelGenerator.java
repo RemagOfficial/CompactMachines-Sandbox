@@ -26,6 +26,7 @@ public class ItemModelGenerator extends ItemModelProvider {
         
         withExistingParent("solid_wall", modLoc("block/wall"));
         withExistingParent("solid_wall_cracked", modLoc("block/wall_cracked"));
+        withExistingParent("solid_wall_white", modLoc("block/wall_white"));
         withExistingParent("wall", modLoc("block/wall"));
 
         basic(modLoc("personal_shrinking_device"))

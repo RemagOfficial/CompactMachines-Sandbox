@@ -1,9 +1,8 @@
 package dev.compactmods.machines.test.gametest.data;
 
-import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.room.history.RoomEntryPoint;
-import dev.compactmods.machines.player.PlayerEntryPointHistoryManager;
 import dev.compactmods.machines.api.room.history.RoomEntryResult;
+import dev.compactmods.machines.player.PlayerEntryPointHistoryManager;
 import dev.compactmods.machines.room.RoomCodeGenerator;
 import dev.compactmods.machines.test.gametest.core.EmptyTestSizes;
 import net.minecraft.gametest.framework.GameTest;
@@ -49,7 +48,7 @@ public class PlayerHistoryTrackerTests {
         for (int i = 0; i < 5; i++) {
             var roomId = RoomCodeGenerator.generateRoomId();
             codes.push(roomId);
-            history.enterRoom(player, roomId, RoomEntryPoint.nonexistent());
+            history.enterRoom(player, roomId, 0, RoomEntryPoint.nonexistent());
 
             Thread.sleep(250);
         }
@@ -77,7 +76,7 @@ public class PlayerHistoryTrackerTests {
         for (int i = 0; i < 5; i++) {
             var roomId = RoomCodeGenerator.generateRoomId();
             codes.push(roomId);
-            history.enterRoom(player, roomId, RoomEntryPoint.nonexistent());
+            history.enterRoom(player, roomId, 0, RoomEntryPoint.nonexistent());
 
             Thread.sleep(250);
         }
@@ -105,7 +104,7 @@ public class PlayerHistoryTrackerTests {
         for (int i = 0; i < 5; i++) {
             var roomId = RoomCodeGenerator.generateRoomId();
             codes.push(roomId);
-            history.enterRoom(player, roomId, RoomEntryPoint.nonexistent());
+            history.enterRoom(player, roomId, 0, RoomEntryPoint.nonexistent());
 
             Thread.sleep(250);
         }
