@@ -20,7 +20,6 @@ import dev.compactmods.machines.room.upgrade.RoomUpgradeEventHandlers;
 import dev.compactmods.machines.room.upgrade.RoomUpgrades;
 import dev.compactmods.machines.server.event.RoomTemplatesCheckEventHandler;
 import dev.compactmods.machines.shrinking.Shrinking;
-import dev.compactmods.machines.villager.Villagers;
 import net.minecraft.util.FastColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;

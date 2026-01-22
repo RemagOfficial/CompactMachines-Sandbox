@@ -4,7 +4,6 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.compactmods.machines.api.attachment.CMDataAttachments;
 import dev.compactmods.machines.util.PlayerDepthHelper;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;

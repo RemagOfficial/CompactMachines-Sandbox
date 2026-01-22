@@ -14,8 +14,6 @@ import dev.compactmods.machines.client.keybinds.room.RoomUpgradeUIMapping;
 import dev.compactmods.machines.room.Rooms;
 import dev.compactmods.machines.shrinking.Shrinking;
 import net.minecraft.Util;
-import net.minecraft.core.Direction;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 
 public class EnglishLangGenerator extends dev.compactmods.machines.datagen.base.lang.BaseLangGenerator {

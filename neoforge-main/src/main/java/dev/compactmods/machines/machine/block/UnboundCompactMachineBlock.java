@@ -11,7 +11,6 @@ import dev.compactmods.machines.api.room.template.RoomTemplateHelper;
 import dev.compactmods.machines.api.shrinking.PSDTags;
 import dev.compactmods.machines.machine.Machines;
 import dev.compactmods.machines.room.RoomHelper;
-import dev.compactmods.machines.room.Rooms;
 import dev.compactmods.machines.shrinking.PersonalShrinkingDevice;
 import dev.compactmods.machines.shrinking.Shrinking;
 import dev.compactmods.machines.util.PlayerDepthHelper;
@@ -68,7 +67,8 @@ public class UnboundCompactMachineBlock extends CompactMachineBlock implements E
 		return new UnboundCompactMachineEntity(pos, state);
 	}
 
-	@Override
+	@SuppressWarnings("removal")
+    @Override
 	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand p_316595_, BlockHitResult p_316140_) {
 		if (stack.getItem() instanceof DyeItem dye && !level.isClientSide && level instanceof ServerLevel serverLevel) {
 			return tryDyingMachine(serverLevel, pos, player, dye, stack);
