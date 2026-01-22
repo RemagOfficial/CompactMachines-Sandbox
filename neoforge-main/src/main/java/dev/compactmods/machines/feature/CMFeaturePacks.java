@@ -34,7 +34,7 @@ public class CMFeaturePacks {
                 PackType.SERVER_DATA,
                 displayName,
                 OPTIONAL_ROOM_TEMPLATES,
-                false,
+                true,
                 Pack.Position.TOP
         );
     }
